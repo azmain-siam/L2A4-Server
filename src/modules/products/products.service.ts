@@ -7,6 +7,12 @@ const createProduct = async (product: IProduct): Promise<IProduct> => {
   return result;
 };
 
+const getProduct = async () => {
+  const result = await Product.find();
+  return result;
+};
+
 export const productService = {
   createProduct,
+  getProduct,
 };
