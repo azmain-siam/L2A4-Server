@@ -26,7 +26,7 @@ const getProducts = async (req: Request, res: Response) => {
     const result = await productService.getProduct();
     res.json({
       success: true,
-      message: "Products getting successfully",
+      message: "Products retrieved successfully",
       result,
     });
   } catch (error) {
@@ -38,7 +38,27 @@ const getProducts = async (req: Request, res: Response) => {
   }
 };
 
+const getSpecificProductById = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId;
+
+    const result = await productService.getSpecificProductById(productId);
+    res.json({
+      status: true,
+      message: "Product retrieved successfully",
+      data: result,
+    });
+  } catch (error) {
+    res.json({
+      status: false,
+      message: "There is a problem retrieving product!",
+      error,
+    });
+  }
+};
+
 export const productController = {
   createProduct,
   getProducts,
+  getSpecificProductById,
 };
