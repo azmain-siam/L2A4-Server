@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
-// import userRouter from "./module/user/user.router";
+import productRouter from "./modules/products/products.router";
 
 const app = express();
 
 app.use(express.json());
-// app.use("/api/user", userRouter);
+app.use("/api/products", productRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send({
