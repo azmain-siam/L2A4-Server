@@ -57,8 +57,52 @@ const getSpecificProductById = async (req: Request, res: Response) => {
   }
 };
 
+const updateSpecificStationaryProduct = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId;
+    const data = req.body;
+    const result = await productService.updateSpecificStationaryProduct(
+      productId,
+      data
+    );
+
+    res.json({
+      message: "Product updated successfully",
+      status: true,
+      data: result,
+    });
+  } catch (error) {
+    res.json({
+      status: false,
+      message: "There is a problem updating product!",
+      error,
+    });
+  }
+};
+
+const deleteAProduct = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId;
+    await productService.deleteAProduct(productId);
+
+    res.json({
+      message: "Product deleted successfully",
+      status: true,
+      data: {},
+    });
+  } catch (error) {
+    res.json({
+      status: false,
+      message: "There is a problem deleting product!",
+      error,
+    });
+  }
+};
+
 export const productController = {
   createProduct,
   getProducts,
   getSpecificProductById,
+  updateSpecificStationaryProduct,
+  deleteAProduct,
 };

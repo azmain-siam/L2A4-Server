@@ -17,8 +17,25 @@ const getSpecificProductById = async (productId: string) => {
   return result;
 };
 
+const updateSpecificStationaryProduct = async (
+  productId: string,
+  data: Partial<IProduct>
+) => {
+  const result = await Product.findByIdAndUpdate(productId, data, {
+    new: true,
+  });
+  return result;
+};
+
+const deleteAProduct = async (productId: string) => {
+  const result = await Product.findByIdAndDelete(productId);
+  return result;
+};
+
 export const productService = {
   createProduct,
   getProduct,
   getSpecificProductById,
+  updateSpecificStationaryProduct,
+  deleteAProduct,
 };
