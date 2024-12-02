@@ -7,33 +7,36 @@ const createProduct = async (req: Request, res: Response) => {
     const result = await productService.createProduct(product);
 
     res.json({
-      status: true,
       message: "Product created successfully",
-      result,
+      status: true,
+      data: result,
     });
   } catch (error) {
+    const err = error as Error;
     res.json({
       status: false,
-      message: "something went wrong",
+      message: "There is a problem creating product",
       error,
-      // stack: error.stack,
+      stack: err.stack,
     });
   }
 };
 
-const getProducts = async (req: Request, res: Response) => {
+const getAllProducts = async (req: Request, res: Response) => {
   try {
     const result = await productService.getProduct();
     res.json({
-      success: true,
       message: "Products retrieved successfully",
-      result,
+      success: true,
+      data: result,
     });
   } catch (error) {
+    const err = error as Error;
     res.json({
       status: false,
       message: "something went wrong",
       error,
+      stack: err.stack,
     });
   }
 };
@@ -44,15 +47,17 @@ const getSpecificProductById = async (req: Request, res: Response) => {
 
     const result = await productService.getSpecificProductById(productId);
     res.json({
-      status: true,
       message: "Product retrieved successfully",
+      status: true,
       data: result,
     });
   } catch (error) {
+    const err = error as Error;
     res.json({
       status: false,
       message: "There is a problem retrieving product!",
       error,
+      stack: err.stack,
     });
   }
 };
@@ -72,10 +77,12 @@ const updateSpecificStationaryProduct = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
+    const err = error as Error;
     res.json({
       status: false,
       message: "There is a problem updating product!",
       error,
+      stack: err.stack,
     });
   }
 };
@@ -101,7 +108,7 @@ const deleteAProduct = async (req: Request, res: Response) => {
 
 export const productController = {
   createProduct,
-  getProducts,
+  getAllProducts,
   getSpecificProductById,
   updateSpecificStationaryProduct,
   deleteAProduct,

@@ -47,11 +47,14 @@ const createOrder = async (req: Request<IOrder>, res: Response) => {
 
 const calculateRevenue = async (req: Request, res: Response) => {
   try {
-    const totalRevenue = await orderService.calculateRevenue();
+    const result = await orderService.calculateRevenue();
 
     res.json({
+      message: "Revenue calculated successfully",
       success: true,
-      totalRevenue,
+      data: {
+        totalRevenue: result,
+      },
     });
   } catch (error) {
     res.json({

@@ -17,9 +17,23 @@ const calculateRevenue = async () => {
         as: "productDetails",
       },
     },
+    {
+      // Unwind the productDetails array to get a single object
+      $unwind: "$productDetails",
+    },
+    {
+      $addFields: {
+        orderRevenue: { $multiply: ["$productDetails.price", "$quantity"] },
+      },
+    },
+    {
+      $group: { _id: null, totalRevenue: { $sum: "$orderRevenue" } },
+    },
   ]);
 
-  return revenueData;
+  const totalRevenue = revenueData.length > 0 ? revenueData[0].totalRevenue : 0;
+
+  return totalRevenue;
 };
 
 export const orderService = {

@@ -22,6 +22,7 @@ const updateSpecificStationaryProduct = async (
   data: Partial<IProduct>
 ) => {
   const result = await Product.findByIdAndUpdate(productId, data, {
+    runValidators: true,
     new: true,
   });
   return result;
