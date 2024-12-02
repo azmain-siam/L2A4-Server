@@ -3,6 +3,7 @@ import { productService } from "../products/products.service";
 import { orderService } from "./order.service";
 import { IOrder } from "./order.interface";
 
+// Function to create an order.
 const createOrder = async (req: Request<IOrder>, res: Response) => {
   try {
     const order = req.body;
@@ -45,6 +46,7 @@ const createOrder = async (req: Request<IOrder>, res: Response) => {
   }
 };
 
+// Function to calculate the total revenue from all orders
 const calculateRevenue = async (req: Request, res: Response) => {
   try {
     const result = await orderService.calculateRevenue();

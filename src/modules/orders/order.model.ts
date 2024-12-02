@@ -7,7 +7,11 @@ const orderSchema = new Schema(
       required: [true, "Email is required"],
       match: [/^[^@]+@[^@]+\.[^@]+$/, "Please provide a valid email address"],
     },
-    product: { type: Schema.Types.ObjectId, required: true },
+    product: {
+      type: Schema.Types.ObjectId,
+      required: [true, "Product is required."],
+      ref: "Product",
+    },
     quantity: {
       type: Number,
       required: [true, "Quantity is required"],
