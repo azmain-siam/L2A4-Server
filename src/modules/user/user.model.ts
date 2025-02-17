@@ -1,5 +1,7 @@
 import { model, Schema } from "mongoose";
 import { IUser } from "./user.interface";
+import bcrypt from "bcrypt";
+import config from "../../config";
 
 const userSchema = new Schema<IUser>(
   {
@@ -9,9 +11,14 @@ const userSchema = new Schema<IUser>(
       required: [true, "Please provide your email"],
       unique: true,
     },
-    password: { type: String, required: [true, "Please add password"] },
+    password: {
+      type: String,
+      required: [true, "Please add password"],
+      select: false,
+    },
     role: {
       type: String,
+      required: true,
       enum: {
         values: ["user", "admin"],
         message: "{VALUE} is not valid, please provide a valid role",
@@ -24,6 +31,22 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-const User = model("User", userSchema);
+userSchema.pre("save", async function (next) {
+  const password = await bcrypt.hash(
+    this.password,
+    Number(config.bcrypt_salt_round)
+  );
+
+  this.password = password;
+  next();
+});
+
+userSchema.post("save", function (doc, next) {
+  doc.password = "";
+
+  next();
+});
+
+const User = model<IUser>("User", userSchema);
 
 export default User;
