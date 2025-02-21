@@ -2,8 +2,16 @@ import express, { Request, Response } from "express";
 import productRouter from "./modules/products/products.router";
 import orderRouter from "./modules/orders/order.router";
 import authRoute from "./modules/auth/auth.route";
+import cors from "cors";
 
 const app = express();
+
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use("/api/auth", authRoute);

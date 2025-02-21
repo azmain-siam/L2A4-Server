@@ -1,3 +1,4 @@
+import config from "../../config";
 import { IUser } from "../user/user.interface";
 import User from "../user/user.model";
 import { ILoginUser } from "./auth.interface";
@@ -22,14 +23,24 @@ const login = async (payload: ILoginUser) => {
     throw new Error("Password doesn't match!");
   }
 
-  const token = jwt.sign({ email: user.email, role: user.role }, "secret", {
-    expiresIn: "20d",
+  const jwtPayload = { email: user.email, role: user.role };
+
+  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
+    expiresIn: "1d",
   });
+
+  const refreshToken = jwt.sign(
+    jwtPayload,
+    config.jwt_refresh_secret as string,
+    {
+      expiresIn: "365d",
+    }
+  );
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { password, ...withoutPassword } = user.toObject();
 
-  return { token, withoutPassword };
+  return { accessToken, refreshToken, user: withoutPassword };
 };
 
 export const AuthService = {
