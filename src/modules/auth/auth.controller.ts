@@ -7,27 +7,32 @@ import { StatusCodes } from "http-status-codes";
 const register = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.register(req.body);
 
-  res.cookie("refreshToken", result.refreshToken, {
+  sendResponse(res, {
+    status: true,
+    statusCode: StatusCodes.CREATED,
+    message: "User registered successfully!",
+    data: result,
+  });
+});
+
+const login = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthService.login(req.body);
+  // return console.log(result);
+
+  const { refreshToken, accessToken } = result;
+
+  res.cookie("refreshToken", refreshToken, {
     secure: true,
     httpOnly: true,
   });
 
   sendResponse(res, {
     status: true,
-    statusCode: StatusCodes.CREATED,
-    message: "User registered successfully!",
-    data: result.user,
-  });
-});
-
-const login = catchAsync(async (req: Request, res: Response) => {
-  const result = await AuthService.login(req.body);
-
-  sendResponse(res, {
-    status: true,
     statusCode: StatusCodes.OK,
     message: "Logged in successfully",
-    data: result,
+    data: {
+      token: accessToken,
+    },
   });
 });
 
