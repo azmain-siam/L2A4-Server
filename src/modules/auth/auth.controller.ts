@@ -3,8 +3,19 @@ import { AuthService } from "./auth.service";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { StatusCodes } from "http-status-codes";
+import User from "../user/user.model";
 
 const register = catchAsync(async (req: Request, res: Response) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  if (user) {
+    sendResponse(res, {
+      status: false,
+      statusCode: StatusCodes.BAD_REQUEST,
+      message: "Email already registered",
+    });
+  }
+
   const result = await AuthService.register(req.body);
 
   sendResponse(res, {

@@ -1,8 +1,10 @@
 import config from "../../config";
+import AppError from "../../error/AppError";
 import { IUser } from "../user/user.interface";
 import User from "../user/user.model";
 import { ILoginUser } from "./auth.interface";
 import bcrypt from "bcrypt";
+import httpStatus from "http-status";
 import jwt from "jsonwebtoken";
 
 const register = async (payload: IUser) => {
@@ -14,13 +16,13 @@ const login = async (payload: ILoginUser) => {
   const user = await User.findOne({ email: payload.email }).select("+password");
 
   if (!user) {
-    throw new Error("User not found!");
+    throw new AppError(httpStatus.NOT_FOUND, "User not found!");
   }
 
   const isPasswordMatch = await bcrypt.compare(payload.password, user.password);
 
   if (!isPasswordMatch) {
-    throw new Error("Password doesn't match!");
+    throw new AppError(httpStatus.NOT_FOUND, "Password doesn't match!");
   }
 
   const jwtPayload = { email: user.email, role: user.role };

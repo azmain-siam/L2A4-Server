@@ -1,6 +1,8 @@
 import catchAsync from "../utils/catchAsync";
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import AppError from "../error/AppError";
+import httpStatus from "http-status";
 
 interface IDecoded {
   email: string;
@@ -15,19 +17,19 @@ const auth = (requiredRole: string) => {
 
     // Check if the token sent from client
     if (!token) {
-      throw new Error("You are not authorized");
+      throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized");
     }
 
     // Check if the token is valid
     jwt.verify(token, "secret", function (err, decoded) {
       if (err) {
-        throw new Error("Unauthorized");
+        throw new AppError(httpStatus.UNAUTHORIZED, "Unauthorized");
       }
 
       const { role } = decoded as IDecoded;
 
       if (requiredRole !== role) {
-        throw new Error("You are not unauthorized");
+        throw new AppError(httpStatus.UNAUTHORIZED, "You are not unauthorized");
       }
 
       req.user = decoded as JwtPayload;

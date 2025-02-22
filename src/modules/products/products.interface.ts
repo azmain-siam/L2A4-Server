@@ -10,5 +10,6 @@ export interface IProduct {
     | "Technology";
   description: string;
   quantity: number;
+  image: string;
   inStock: boolean;
 }
