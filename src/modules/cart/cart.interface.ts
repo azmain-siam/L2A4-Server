@@ -1,10 +1,13 @@
+import { ObjectId } from "mongoose";
+
 export interface CartItem {
+  _id?: ObjectId;
   productId: string;
   cartQuantity: number;
 }
 
-export interface Cart {
-  userId: string;
+export interface ICart {
+  userId: ObjectId;
   items: CartItem[];
   createdAt?: string;
   updatedAt?: string;

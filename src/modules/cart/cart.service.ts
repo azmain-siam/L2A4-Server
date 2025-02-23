@@ -1,4 +1,4 @@
-import { IAddToCart } from "./cart.interface";
+import { ICart, IAddToCart } from "./cart.interface";
 import Cart from "./cart.model";
 
 const addToCartService = async (payload: IAddToCart) => {
@@ -30,7 +30,23 @@ const getCartItems = async (userId: string) => {
   return cart;
 };
 
+const deleteCartItems = async (cartId: string, itemId: string) => {
+  const cart: ICart | null = await Cart.findById(cartId);
+
+  if (!cart) {
+    throw new Error("Cart not found");
+  }
+
+  const items = cart.items.filter((item) => item._id?.toString() !== itemId);
+  cart.items = items;
+
+  await Cart.findByIdAndUpdate(cartId, cart);
+  
+  return cart;
+};
+
 export const CartService = {
   addToCartService,
   getCartItems,
+  deleteCartItems,
 };
