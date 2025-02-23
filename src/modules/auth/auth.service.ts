@@ -25,7 +25,12 @@ const login = async (payload: ILoginUser) => {
     throw new AppError(httpStatus.NOT_FOUND, "Password doesn't match!");
   }
 
-  const jwtPayload = { email: user.email, name: user.name, role: user.role };
+  const jwtPayload = {
+    email: user.email,
+    name: user.name,
+    role: user.role,
+    id: user._id,
+  };
 
   const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
     expiresIn: "1d",
