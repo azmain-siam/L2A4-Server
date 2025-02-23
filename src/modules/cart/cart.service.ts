@@ -13,7 +13,7 @@ const addToCartService = async (payload: IAddToCart) => {
     );
 
     if (itemIndex > -1) {
-      cart.items[itemIndex].cartQuantity += cartQuantity;
+      cart.items[itemIndex].cartQuantity = cartQuantity;
     } else {
       cart.items.push({ productId, cartQuantity });
     }
