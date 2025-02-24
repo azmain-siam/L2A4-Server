@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { productService } from "../products/products.service";
 import { orderService } from "./order.service";
 import { IOrder } from "./order.interface";
+import catchAsync from "../../utils/catchAsync";
 
 // Function to create an order.
 const createOrder = async (req: Request<IOrder>, res: Response) => {
@@ -46,6 +47,16 @@ const createOrder = async (req: Request<IOrder>, res: Response) => {
   }
 };
 
+const getAllOrders = catchAsync(async (req: Request, res: Response) => {
+  const orders = await orderService.getAllOrders();
+
+  res.json({
+    success: true,
+    message: "Orders retrieved successfully",
+    data: orders,
+  });
+});
+
 // Function to calculate the total revenue from all orders
 const calculateRevenue = async (req: Request, res: Response) => {
   try {
@@ -69,4 +80,5 @@ const calculateRevenue = async (req: Request, res: Response) => {
 export const orderController = {
   createOrder,
   calculateRevenue,
+  getAllOrders,
 };

@@ -7,6 +7,12 @@ const createOrder = async (order: IOrder): Promise<IOrder> => {
   return result;
 };
 
+const getAllOrders = async () => {
+  const orders = await Order.find().populate("product");
+
+  return orders;
+};
+
 const calculateRevenue = async () => {
   const revenueData = await Order.aggregate([
     {
@@ -38,5 +44,6 @@ const calculateRevenue = async () => {
 
 export const orderService = {
   createOrder,
+  getAllOrders,
   calculateRevenue,
 };
