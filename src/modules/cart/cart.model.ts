@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
+import { ICart } from "./cart.interface";
 
-const cartSchema = new Schema(
+const cartSchema = new Schema<ICart>(
   {
     userId: {
       type: Schema.Types.ObjectId,

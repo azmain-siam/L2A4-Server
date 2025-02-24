@@ -30,7 +30,23 @@ const getCart = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const deleteCartItems = catchAsync(async (req: Request, res: Response) => {
+  const { itemId, cartId } = req.body;
+
+  const result = await CartService.deleteCartItems(cartId, itemId);
+
+  // console.log(result, "cart");
+
+  sendResponse(res, {
+    status: true,
+    message: "Item deleted successfully",
+    data: result,
+    statusCode: StatusCodes.OK,
+  });
+});
+
 export const CartController = {
   addToCart,
   getCart,
+  deleteCartItems,
 };
