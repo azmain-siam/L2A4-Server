@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import AppError from "../error/AppError";
 import httpStatus from "http-status";
+import config from "../config";
 
 interface IDecoded {
   email: string;
@@ -21,20 +22,27 @@ const auth = (requiredRole: string) => {
     }
 
     // Check if the token is valid
-    jwt.verify(token, "secret", function (err, decoded) {
-      if (err) {
-        throw new AppError(httpStatus.UNAUTHORIZED, "Unauthorized");
+    jwt.verify(
+      token,
+      config.jwt_access_secret as string,
+      function (err, decoded) {
+        if (err) {
+          throw new AppError(httpStatus.UNAUTHORIZED, "Unauthorized");
+        }
+
+        const { role } = decoded as IDecoded;
+
+        if (requiredRole !== role) {
+          throw new AppError(
+            httpStatus.UNAUTHORIZED,
+            "You are not unauthorized"
+          );
+        }
+
+        req.user = decoded as JwtPayload;
+        next();
       }
-
-      const { role } = decoded as IDecoded;
-
-      if (requiredRole !== role) {
-        throw new AppError(httpStatus.UNAUTHORIZED, "You are not unauthorized");
-      }
-
-      req.user = decoded as JwtPayload;
-      next();
-    });
+    );
   });
 };
 

@@ -8,31 +8,43 @@ import catchAsync from "../../utils/catchAsync";
 const createOrder = async (req: Request<IOrder>, res: Response) => {
   try {
     const order = req.body;
-    const product = await productService.getSpecificProductById(order.product);
-    if (!product) {
-      res.json({
-        message: "Product not found.",
-      });
-      return;
-    }
 
-    // Check if there is sufficient stock
-    if (product.quantity < order.quantity) {
-      res.json({ message: "Insufficient stock available." });
-      return;
+    // Iterate through each product in the order
+    for (const item of order.products) {
+      const product = await productService.getSpecificProductById(
+        item.productId
+      );
+
+      if (!product) {
+        return res
+          .status(404)
+          .json({ message: `Product ${item.productId} not found.` });
+      }
+
+      // Check if sufficient stock is available
+      if (product.quantity < item.quantity) {
+        return res
+          .status(400)
+          .json({ message: `Insufficient stock for product ${product.name}.` });
+      }
     }
 
     // Create the order
     const newOrder = await orderService.createOrder(order);
 
-    // Reduce the quantity of the product
-    const newQuantity = product.quantity - order.quantity;
-
-    // Update inStock field and quantity field
-    await productService.updateSpecificStationaryProduct(order.product, {
-      quantity: newQuantity,
-      inStock: newQuantity > 0,
-    });
+    // Reduce stock for each product
+    for (const item of order.products) {
+      const product = await productService.getSpecificProductById(
+        item.productId
+      );
+      if (product) {
+        const newQuantity = product.quantity - item.quantity;
+        await productService.updateSpecificStationaryProduct(item.productId, {
+          quantity: newQuantity,
+          inStock: newQuantity > 0,
+        });
+      }
+    }
 
     res.json({
       success: true,
@@ -40,7 +52,7 @@ const createOrder = async (req: Request<IOrder>, res: Response) => {
       data: newOrder,
     });
   } catch (error) {
-    res.json({
+    res.status(500).json({
       message: "An error occurred while creating the order.",
       error,
     });
