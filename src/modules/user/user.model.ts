@@ -25,6 +25,15 @@ const userSchema = new Schema<IUser>(
       },
       default: "user",
     },
+    status: {
+      type: String,
+      required: true,
+      enum: {
+        values: ["active", "inactive"],
+        message: "{VALUE} is not valid, please provide a valid role",
+      },
+      default: "active",
+    },
   },
   {
     timestamps: true,
