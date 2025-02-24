@@ -7,5 +7,5 @@ export interface IOrder {
     quantity: number;
     totalPrice: number;
   }[];
-  status: "pending" | "shipping" | "cancelled";
+  status: "pending" | "shipping" | "cancelled" | "delivered";
 }

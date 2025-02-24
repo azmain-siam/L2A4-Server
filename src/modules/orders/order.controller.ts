@@ -75,6 +75,18 @@ const getAllOrders = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
+  const { orderId } = req.params;
+  const { status } = req.body;
+  const updatedOrder = await orderService.updateOrderStatus(orderId, status);
+
+  res.json({
+    success: true,
+    message: "Order status updated successfully",
+    data: updatedOrder,
+  });
+});
+
 // Function to calculate the total revenue from all orders
 const calculateRevenue = async (req: Request, res: Response) => {
   try {
@@ -99,4 +111,5 @@ export const orderController = {
   createOrder,
   calculateRevenue,
   getAllOrders,
+  updateOrderStatus,
 };

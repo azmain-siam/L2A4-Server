@@ -8,9 +8,21 @@ const createOrder = async (order: IOrder) => {
 };
 
 const getAllOrders = async () => {
-  const orders = await Order.find().populate("product");
+  const orders = await Order.find()
+    .populate("products.productId")
+    .populate("user");
 
   return orders;
+};
+
+const updateOrderStatus = async (orderId: string, status: string) => {
+  const order = await Order.findByIdAndUpdate(
+    orderId,
+    { status },
+    { new: true }
+  );
+
+  return order;
 };
 
 const calculateRevenue = async () => {
@@ -46,4 +58,5 @@ export const orderService = {
   createOrder,
   getAllOrders,
   calculateRevenue,
+  updateOrderStatus,
 };

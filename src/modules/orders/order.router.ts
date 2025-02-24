@@ -7,5 +7,6 @@ const orderRouter = Router();
 orderRouter.post("/", orderController.createOrder);
 orderRouter.get("/", orderController.getAllOrders);
 orderRouter.get("/revenue", auth("admin"), orderController.calculateRevenue);
+orderRouter.patch("/:orderId", auth("admin"), orderController.updateOrderStatus);
 
 export default orderRouter;
