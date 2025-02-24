@@ -3,11 +3,17 @@ import { productService } from "../products/products.service";
 import { orderService } from "./order.service";
 import { IOrder } from "./order.interface";
 import catchAsync from "../../utils/catchAsync";
+import User from "../user/user.model";
 
 // Function to create an order.
 const createOrder = async (req: Request<IOrder>, res: Response) => {
   try {
-    const order = req.body;
+    const order: IOrder = req.body;
+    // return console.log(order);
+    const user = await User.findById(order.user);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
 
     // Iterate through each product in the order
     for (const item of order.products) {

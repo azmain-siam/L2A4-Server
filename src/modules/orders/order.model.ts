@@ -3,11 +3,7 @@ import { IOrder } from "./order.interface";
 
 const orderSchema = new Schema<IOrder>(
   {
-    email: {
-      type: String,
-      required: [true, "Email is required"],
-      match: [/^[^@]+@[^@]+\.[^@]+$/, "Please provide a valid email address"],
-    },
+    user: { type: Schema.ObjectId, required: true },
     products: [
       {
         productId: {
