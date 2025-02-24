@@ -1,10 +1,26 @@
 import { IOrder } from "./order.interface";
 import Order from "./order.model";
+import { orderUtils } from "./order.utils";
 
 const createOrder = async (order: IOrder) => {
   const result = await Order.create(order);
 
-  return result;
+  const shurjopayPayload = {
+    amount: 100,
+    order_id: "234343",
+    currency: "BDT",
+    customer_name: "John Doe",
+    customer_email: "abc@gmail.com",
+    customer_phone: "01711111111",
+    customer_address: "Dhaka",
+    customer_city: "Dhaka",
+  };
+
+  const payment = await orderUtils.makePayment(shurjopayPayload);
+
+  console.log(payment);
+
+  return { result, payment };
 };
 
 const getAllOrders = async () => {
