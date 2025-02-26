@@ -4,6 +4,8 @@ import { orderService } from "./order.service";
 import { IOrder } from "./order.interface";
 import catchAsync from "../../utils/catchAsync";
 import User from "../user/user.model";
+import Product from "../products/products.model";
+import Cart from "../cart/cart.model";
 
 // Function to create an order.
 const createOrder = async (req: Request<IOrder>, res: Response) => {
@@ -17,9 +19,7 @@ const createOrder = async (req: Request<IOrder>, res: Response) => {
 
     // Iterate through each product in the order
     for (const item of order.products) {
-      const product = await productService.getSpecificProductById(
-        item.productId
-      );
+      const product = await Product.findById(item.productId);
 
       if (!product) {
         return res
@@ -51,6 +51,13 @@ const createOrder = async (req: Request<IOrder>, res: Response) => {
         });
       }
     }
+
+    // remove items from the user cart after ordering
+    await Cart.findOneAndUpdate(
+      { userId: order.user },
+      { $set: { items: [] } },
+      { new: true }
+    );
 
     res.json({
       success: true,

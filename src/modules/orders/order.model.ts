@@ -33,6 +33,7 @@ const orderSchema = new Schema<IOrder>(
       enum: ["pending", "shipping", "cancelled"],
       default: "pending",
     },
+    totalAmount: { type: Number, required: true },
   },
   { timestamps: true }
 );

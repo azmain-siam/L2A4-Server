@@ -8,4 +8,5 @@ export interface IOrder {
     totalPrice: number;
   }[];
   status: "pending" | "shipping" | "cancelled" | "delivered";
+  totalAmount: number;
 }
