@@ -28,7 +28,6 @@ const register = catchAsync(async (req: Request, res: Response) => {
 
 const login = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.login(req.body);
-  // return console.log(result);
 
   const { refreshToken, accessToken } = result;
 

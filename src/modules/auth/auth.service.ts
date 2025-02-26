@@ -19,6 +19,10 @@ const login = async (payload: ILoginUser) => {
     throw new AppError(httpStatus.NOT_FOUND, "User not found!");
   }
 
+  if (user.status === "inactive") {
+    throw new AppError(httpStatus.NOT_FOUND, "Account is deactivated!");
+  }
+
   const isPasswordMatch = await bcrypt.compare(payload.password, user.password);
 
   if (!isPasswordMatch) {
