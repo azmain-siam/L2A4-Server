@@ -15,6 +15,14 @@ const getAllOrders = async () => {
   return orders;
 };
 
+const getOrdersByUserId = async (userId: string) => {
+  const orders = await Order.find({ user: userId }).populate(
+    "products.productId"
+  );
+
+  return orders;
+};
+
 const updateOrderStatus = async (orderId: string, status: string) => {
   const order = await Order.findByIdAndUpdate(
     orderId,
@@ -57,6 +65,7 @@ const calculateRevenue = async () => {
 export const orderService = {
   createOrder,
   getAllOrders,
+  getOrdersByUserId,
   calculateRevenue,
   updateOrderStatus,
 };

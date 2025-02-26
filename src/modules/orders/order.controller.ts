@@ -75,6 +75,17 @@ const getAllOrders = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getOrdersByUserId = catchAsync(async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  const orders = await orderService.getOrdersByUserId(userId);
+
+  res.json({
+    success: true,
+    message: "Orders retrieved successfully",
+    data: orders,
+  });
+});
+
 const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
   const { orderId } = req.params;
   const { status } = req.body;
@@ -111,5 +122,6 @@ export const orderController = {
   createOrder,
   calculateRevenue,
   getAllOrders,
+  getOrdersByUserId,
   updateOrderStatus,
 };

@@ -2,6 +2,14 @@ import { IProduct } from "./products.interface";
 import Product from "./products.model";
 
 const createProduct = async (product: IProduct): Promise<IProduct> => {
+  // console.log(product, "product");
+
+  if (product.quantity > 0) {
+    product.inStock = true;
+  } else {
+    product.inStock = false;
+  }
+
   const result: IProduct = await Product.create(product);
 
   return result;

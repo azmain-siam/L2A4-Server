@@ -5,8 +5,13 @@ import auth from "../../middlewares/auth";
 const orderRouter = Router();
 
 orderRouter.post("/", orderController.createOrder);
-orderRouter.get("/", orderController.getAllOrders);
-orderRouter.get("/revenue", auth("admin"), orderController.calculateRevenue);
-orderRouter.patch("/:orderId", auth("admin"), orderController.updateOrderStatus);
+orderRouter.get("/", auth(["user", "admin"]), orderController.getAllOrders);
+orderRouter.get("/:userId", orderController.getOrdersByUserId);
+orderRouter.get("/revenue", auth(["admin"]), orderController.calculateRevenue);
+orderRouter.patch(
+  "/:orderId",
+  auth(["admin", "user"]),
+  orderController.updateOrderStatus
+);
 
 export default orderRouter;

@@ -12,7 +12,7 @@ interface IDecoded {
   exp: number;
 }
 
-const auth = (requiredRole: string) => {
+const auth = (requiredRole: string[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
 
@@ -32,7 +32,7 @@ const auth = (requiredRole: string) => {
 
         const { role } = decoded as IDecoded;
 
-        if (requiredRole !== role) {
+        if (!requiredRole.includes(role)) {
           throw new AppError(
             httpStatus.UNAUTHORIZED,
             "You are not unauthorized"
