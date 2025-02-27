@@ -15,7 +15,18 @@ const updateUserStatus = async (userId: string, status: string) => {
   return result;
 };
 
+const updateUserAddress = async (userId: string, address: string) => {
+  const result = await User.findByIdAndUpdate(
+    userId,
+    { address },
+    { new: true }
+  );
+
+  return result;
+};
+
 export const userService = {
   getAllUsers,
   updateUserStatus,
+  updateUserAddress,
 };

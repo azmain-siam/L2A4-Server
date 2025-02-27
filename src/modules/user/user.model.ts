@@ -34,6 +34,7 @@ const userSchema = new Schema<IUser>(
       },
       default: "active",
     },
+    address: { type: String },
   },
   {
     timestamps: true,

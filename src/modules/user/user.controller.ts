@@ -28,7 +28,22 @@ const updateUser = catchAsync(async (req, res) => {
   });
 });
 
+const updateUserAddress = catchAsync(async (req, res) => {
+  const result = await userService.updateUserAddress(
+    req.params.userId,
+    req.body.address
+  );
+
+  sendResponse(res, {
+    data: result,
+    status: true,
+    message: "User address updated successfully",
+    statusCode: StatusCodes.OK,
+  });
+});
+
 export const userController = {
   getAllUsers,
   updateUser,
+  updateUserAddress,
 };
