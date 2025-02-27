@@ -5,6 +5,11 @@ const getAllUsers = async () => {
   return result;
 };
 
+const getUserById = async (userId: string) => {
+  const result = await User.findById(userId);
+  return result;
+};
+
 const updateUserStatus = async (userId: string, status: string) => {
   const result = await User.findByIdAndUpdate(
     userId,
@@ -27,6 +32,7 @@ const updateUserAddress = async (userId: string, address: string) => {
 
 export const userService = {
   getAllUsers,
+  getUserById,
   updateUserStatus,
   updateUserAddress,
 };
