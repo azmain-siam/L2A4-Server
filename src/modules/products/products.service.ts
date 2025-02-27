@@ -1,7 +1,7 @@
 import { IProduct } from "./products.interface";
 import Product from "./products.model";
 
-const createProduct = async (product: IProduct): Promise<IProduct> => {
+const createProduct = async (product: IProduct) => {
   // console.log(product, "product");
 
   if (product.quantity > 0) {
@@ -10,7 +10,7 @@ const createProduct = async (product: IProduct): Promise<IProduct> => {
     product.inStock = false;
   }
 
-  const result: IProduct = await Product.create(product);
+  const result = await Product.create(product);
 
   return result;
 };
@@ -34,7 +34,7 @@ const updateSpecificStationaryProduct = async (
   } else {
     data.inStock = false;
   }
-  
+
   const result = await Product.findByIdAndUpdate(productId, data, {
     runValidators: true,
     new: true,

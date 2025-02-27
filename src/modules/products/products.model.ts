@@ -42,6 +42,7 @@ const productSchema = new Schema(
       type: Boolean,
       required: [true, "Please specify if the product is in stock"],
     },
+    image: { type: String },
   },
   { timestamps: true }
 );

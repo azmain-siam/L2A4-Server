@@ -8,7 +8,7 @@
     "lint:fix": "npx eslint src --fix",
     "format": "npx prettier --ignore-path .prettierignore --write \"**/*.{js,ts,json}\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "npx tsc"
   },
   "keywords": [],
   "author": "",
