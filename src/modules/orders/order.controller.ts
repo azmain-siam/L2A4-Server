@@ -6,6 +6,8 @@ import catchAsync from "../../utils/catchAsync";
 import User from "../user/user.model";
 import Product from "../products/products.model";
 import Cart from "../cart/cart.model";
+import Stripe from "stripe";
+import config from "../../config";
 
 // Function to create an order.
 const createOrder = async (req: Request<IOrder>, res: Response) => {
@@ -125,10 +127,25 @@ const calculateRevenue = async (req: Request, res: Response) => {
   }
 };
 
+const createPayment = catchAsync(async (req: Request, res: Response) => {
+  const { amount, currency } = req.body;
+  const stripeAmount = Math.round(amount * 100);
+  
+  const stripe = new Stripe(config.stripe_secret_key as string);
+
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: stripeAmount,
+    currency,
+  });
+
+  res.json({ clientSecret: paymentIntent.client_secret });
+});
+
 export const orderController = {
   createOrder,
   calculateRevenue,
   getAllOrders,
   getOrdersByUserId,
   updateOrderStatus,
+  createPayment,
 };

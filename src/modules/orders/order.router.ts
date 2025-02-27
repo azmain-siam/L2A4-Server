@@ -13,5 +13,6 @@ orderRouter.patch(
   auth(["admin", "user"]),
   orderController.updateOrderStatus
 );
+orderRouter.post("/payment", orderController.createPayment);
 
 export default orderRouter;
