@@ -29,6 +29,12 @@ const updateSpecificStationaryProduct = async (
   productId: string,
   data: Partial<IProduct>
 ) => {
+  if (data.quantity && data.quantity > 0) {
+    data.inStock = true;
+  } else {
+    data.inStock = false;
+  }
+  
   const result = await Product.findByIdAndUpdate(productId, data, {
     runValidators: true,
     new: true,
