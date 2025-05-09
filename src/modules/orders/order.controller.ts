@@ -8,6 +8,8 @@ import Product from "../products/products.model";
 import Cart from "../cart/cart.model";
 import Stripe from "stripe";
 import config from "../../config";
+import sendResponse from "../../utils/sendResponse";
+import { StatusCodes } from "http-status-codes";
 
 // Function to create an order.
 // const createOrder = {
@@ -197,6 +199,19 @@ const calculateRevenue = async (req: Request, res: Response) => {
   }
 };
 
+const calculateRevenueAdmin = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await orderService.calculateRevenueAdmin();
+
+    sendResponse(res, {
+      status: true,
+      statusCode: StatusCodes.OK,
+      message: "Calculate revenue",
+      data: result,
+    });
+  }
+);
+
 const createPayment = catchAsync(async (req: Request, res: Response) => {
   const { amount, currency } = req.body;
   const stripeAmount = Math.round(amount * 100);
@@ -219,4 +234,5 @@ export const orderController = {
   getOrdersByUserId,
   updateOrderStatus,
   createPayment,
+  calculateRevenueAdmin,
 };

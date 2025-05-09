@@ -36,30 +36,45 @@ const updateOrderStatus = async (orderId: string, status: string) => {
 const calculateRevenue = async () => {
   const revenueData = await Order.aggregate([
     {
-      $lookup: {
-        from: "products",
-        localField: "product",
-        foreignField: "_id",
-        as: "productDetails",
+      $match: { status: { $ne: "cancelled" } }, // Only count non-cancelled orders
+    },
+    {
+      $unwind: "$products",
+    },
+    {
+      $group: {
+        _id: null,
+        totalRevenue: { $sum: "$products.totalPrice" },
       },
-    },
-    {
-      // Unwind the productDetails array to get a single object
-      $unwind: "$productDetails",
-    },
-    {
-      $addFields: {
-        orderRevenue: { $multiply: ["$productDetails.price", "$quantity"] },
-      },
-    },
-    {
-      $group: { _id: null, totalRevenue: { $sum: "$orderRevenue" } },
     },
   ]);
 
   const totalRevenue = revenueData.length > 0 ? revenueData[0].totalRevenue : 0;
-
   return totalRevenue;
+};
+
+const calculateRevenueAdmin = async () => {
+  const [revenueResult, completedCount] = await Promise.all([
+    Order.aggregate([
+      { $match: { status: { $eq: "delivered" } } },
+      // { $unwind: "$products" },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$totalAmount" },
+        },
+      },
+    ]),
+    Order.countDocuments({ status: "delivered" }),
+  ]);
+  // console.log(revenueResult);
+  const totalRevenue =
+    revenueResult.length > 0 ? revenueResult[0].totalRevenue : 0;
+
+  return {
+    totalRevenue,
+    totalCompletedOrders: completedCount,
+  };
 };
 
 export const orderService = {
@@ -67,5 +82,6 @@ export const orderService = {
   getAllOrders,
   getOrdersByUserId,
   calculateRevenue,
+  calculateRevenueAdmin,
   updateOrderStatus,
 };

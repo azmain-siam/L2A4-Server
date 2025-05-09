@@ -10,7 +10,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://papernext-client.vercel.app",
+    origin: ["http://localhost:5173"],
     credentials: true,
   })
 );
